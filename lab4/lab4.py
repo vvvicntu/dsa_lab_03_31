@@ -43,6 +43,7 @@ def index():
 def login():
     return render_template('login.html')
 
+
 # POST /login (обработка входа)
 @app.route('/login', methods=['POST'])
 def login_post():
@@ -73,7 +74,6 @@ def login_post():
     return redirect(url_for('index'))
 
 
-
 # GET /signup (страница регистрации)
 @app.route('/signup', methods=['GET'])
 def signup():
@@ -98,26 +98,17 @@ def signup_post():
     user_id = str(len(users_db) + 1)
     new_user = User(user_id, email, password, name)
 
-    # Сохраняем в "базу данных"
+    # Сохраняем в бд
     users_db[user_id] = new_user
 
     # После регистрации отправляем на страницу входа
     return redirect(url_for('login'))
 
 
-# ================================
-# /logout (выход)
-# ================================
-
+# Выход
 @app.route('/logout')
 @login_required
 def logout():
-    """
-    Выход пользователя:
-    - завершает сессию
-    - перенаправляет на страницу входа
-    """
-
     logout_user()
     return redirect(url_for('login'))
 
