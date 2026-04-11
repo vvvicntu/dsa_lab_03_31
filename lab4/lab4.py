@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 
@@ -63,11 +64,11 @@ def login_post():
         flash('Пользователь не найден')
         return redirect(url_for('login'))
 
-    # Проверка пароля
-    if user.password != password:
+    # Проверка хэша пароля
+    if not check_password_hash(user.password, password):
         flash('Неверный пароль')
         return redirect(url_for('login'))
-
+    
     # Авторизация пользователя (создание сессии)
     login_user(user)
 
@@ -94,9 +95,11 @@ def signup_post():
             flash('Пользователь уже существует')
             return redirect(url_for('signup'))
 
+    hashed_password = generate_password_hash(password)
+    
     # Создаём нового пользователя
     user_id = str(len(users_db) + 1)
-    new_user = User(user_id, email, password, name)
+    new_user = User(user_id, email, hashed_password, name) # Сохраняем хэш пароля, а не сам пароль
 
     # Сохраняем в бд
     users_db[user_id] = new_user
