@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Currency Gateway</title>
+</head>
+<body>
+    <h1>Список доступных валют</h1>
+    <table border="1">
+        <tr>
+            <th>Валюта</th>
+            <th>Курс</th>
+        </tr>
+        {% for c in currencies %}
+        <tr>
+            <td>{{ c.currency_name }}</td>
+            <td>{{ c.rate }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Конвертация</h2>
+    <form action="/convert_web" method="get">
+        <input type="text" name="currency_name" placeholder="Код валюты (USD)">
+        <input type="number" name="amount" placeholder="Сумма">
+        <button type="submit">Посчитать</button>
+    </form>
+    
+    {% if result %}
+        <h3>Результат: {{ result }}</h3>
+    {% endif %}
+</body>
+</html>
