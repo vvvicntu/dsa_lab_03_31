@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Операции</title>
+</head>
+
+<body>
+
+<h2>Мои операции</h2>
+
+<form method="GET">
+
+<select name="currency">
+
+<option value="RUB">
+RUB
+</option>
+
+<option value="USD">
+USD
+</option>
+
+<option value="EUR">
+EUR
+</option>
+
+</select>
+
+<button type="submit">
+Показать
+</button>
+
+</form>
+
+<br>
+
+<table border="1">
+
+<tr>
+<th>Дата</th>
+<th>Сумма</th>
+<th>Тип</th>
+<th>Комментарий</th>
+</tr>
+
+{% for op in operations %}
+
+<tr>
+
+<td>{{op.date}}</td>
+
+<td>{{op.sum}} {{currency}}</td>
+
+<td>{{op.type_operation}}</td>
+
+<td>{{op.comment}}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</body>
+</html>
