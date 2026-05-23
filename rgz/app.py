@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, flash, session
 import psycopg2
 import requests
 from psycopg2.extras import RealDictCursor
@@ -36,11 +36,7 @@ def register():
         cur = conn.cursor()
 
         # Проверяем, есть ли пользователь
-        cur.execute(
-            "SELECT * FROM users WHERE name=%s",
-            (name,)
-        )
-
+        cur.execute("SELECT * FROM users WHERE name=%s", (name,))
         user = cur.fetchone()
 
         if user:
@@ -51,14 +47,7 @@ def register():
         password_hash = generate_password_hash(password)
 
         # Сохраняем
-        cur.execute(
-            """
-            INSERT INTO users(name,password_hash)
-            VALUES(%s,%s)
-            """,
-            (name, password_hash)
-        )
-
+        cur.execute( """ INSERT INTO users(name,password_hash) VALUES(%s,%s)""", (name, password_hash))
         conn.commit()
 
         cur.close()
@@ -66,7 +55,6 @@ def register():
 
         flash('Вы успешно зарегистрировались!')
         return redirect('/login')
-
     return render_template('register.html')
 
 # Авторизация
@@ -81,11 +69,7 @@ def login():
         conn = get_db_connection()
         cur = conn.cursor(cursor_factory=RealDictCursor)
 
-        cur.execute(
-            "SELECT * FROM users WHERE name=%s",
-            (name,)
-        )
-
+        cur.execute("SELECT * FROM users WHERE name=%s", (name,))
         user = cur.fetchone()
 
         cur.close()
@@ -101,7 +85,6 @@ def login():
             return redirect('/')
 
         flash('Неверный логин или пароль')
-
     return render_template('login.html')
 
 # Добавление операции
@@ -127,7 +110,6 @@ def add_operation():
             """
             INSERT INTO operations
             (date,sum,user_id,type_operation,comment)
-
             VALUES(%s,%s,%s,%s,%s)
             """,
             (
@@ -198,3 +180,4 @@ def operations():
 # Запуск приложения
 if __name__ == '__main__':
     app.run(debug=True)
+    
